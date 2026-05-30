@@ -1,6 +1,53 @@
-Sure! Here's a clear walkthrough of how the system works and how to enter numbers.
+Here's your Multi-Criteria Decision Support System. It's organized into three steps:
 
----
+**1 · Criteria** — Add the factors that matter to your decision (cost, quality, risk, etc.) and drag each slider to reflect how important it is (1–10).
+
+**2 · Alternatives** — Add the options you're choosing between, then score each one against every criterion you defined (0 = worst, 10 = best).
+
+**3 · Results** — See your alternatives ranked by weighted score. The bar shows each option's overall performance as a percentage of the theoretical maximum.
+
+The file is ready. Here's how to run it:
+
+```bash
+python mcdss.py           # interactive menu (demo or guided session)
+python mcdss.py --demo    # runs the built-in framework comparison example
+python mcdss.py --load decision.json   # reload a saved session
+```
+
+**What's inside:**
+
+The code is built around three clean classes — `Criterion`, `Alternative`, and `Result` — and a central `MCDSS` engine that ties them together.
+
+The engine uses **Simple Additive Weighting (SAW)**: each alternative's score on every criterion is multiplied by the criterion's normalized weight, summed up, and converted to a 0–100% final score.
+
+Key features included:
+
+- **Weighted scoring** — add any number of criteria with arbitrary weights (normalized internally)
+- **Ranking** — alternatives sorted from best to worst with medal labels
+- **Sensitivity analysis** — vary one criterion's weight across its full range and see how rankings shift
+- **Save / load** — persist your decision to JSON and reload it later
+- **Interactive CLI** — guided prompts to enter criteria, alternatives, and scores step by step
+- **Programmatic API** — import `MCDSS` and build decisions in code directly
+
+**Programmatic usage example:**
+
+```python
+from mcdss import MCDSS
+
+m = MCDSS("Vendor Selection")
+m.add_criterion("Price", weight=8)
+m.add_criterion("Support", weight=6)
+
+m.add_alternative("Vendor A")
+m.set_score("Vendor A", "Price", 9)
+m.set_score("Vendor A", "Support", 5)
+
+m.add_alternative("Vendor B")
+m.set_score("Vendor B", "Price", 6)
+m.set_score("Vendor B", "Support", 9)
+
+m.print_results()
+```
 
 ## How the MCDSS works
 
